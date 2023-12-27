@@ -1,0 +1,12 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: large;
+}
+
+.player {
+    display: flex;
+    gap: 10px;
+}
