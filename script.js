@@ -1,68 +1,83 @@
 function getComputerChoice() {
-    return Math.floor(Math.random()*3);
+    const choice = Math.floor(Math.random()*3);
+    switch (choice) {
+        case 0:
+            return "rock";
+        case 1:
+            return "paper";
+        case 2:
+            return "scissors";
+        default:
+            throw new Error("invalid_computer_choice");
+    }
 }
 
 let player_score = 0;
 let computer_score = 0;
 
-function game(player_selection) {
-    let verdict = "";
-    const player_choice = player_selection;
+function displayRoundResult(winner) {
+    if (winner === "player") {
+        player_score++;
+        round_winner.textContent = "Player Won This Round!"
+    } else if (winner === "computer") {
+        computer_score++;
+        round_winner.textContent = "Computer Won This Round!"
+    } else {
+        round_winner.textContent = "DRAW!";
+    }
+    score.textContent = `Player Score: ${player_score} Computer Score: ${computer_score}`;
+    console.log(`player: ${player_score} computer: ${computer_score}`);
+}
+
+function playRound(player_choice) {
     const computer_choice = getComputerChoice();
-
-    if (player_choice == computer_choice) {
-        verdict = "Draw!";
-    }
-    if (verdict) {
-        return verdict;
+    if (computer_choice === player_choice) {
+        displayRoundResult("DRAW!");
+        return;
     }
 
-    if (player_choice == 0) {
-        if (computer_choice == 1) {
-            verdict = "You Lose!";
-            computer_score++;
+    if (player_choice === "rock") {
+        if (computer_choice === "paper") {
+            displayRoundResult("computer");
         } else {
-            player_score++;
-            verdict = "You Win!";
+            displayRoundResult("player");
         }
-    } else if (player_choice == 1) {
-        if (computer_choice == 2) {
-            verdict = "You Lose!";
-            computer_score++;
+    } else if (player_choice === "paper") {
+        if (computer_choice === "scissors") {
+            displayRoundResult("computer");
         } else {
-            player_score++;
-            verdict = "You Win!";
+            displayRoundResult("player");
         }
     } else {
-        if (computer_choice == 0) {
-            verdict = "You Lose!";
-            computer_score++;
+        if (computer_choice === "rock") {
+            displayRoundResult("computer");
         } else {
-            player_score++;
-            verdict = "You Win!";
-        }
-    }
-
-    return verdict;
-}
-
-function playRound(player_selection) {
-    round_winner.textContent = game(player_selection);
-    console.log(player_score, computer_score);
-    if (player_score == 5 || computer_score == 5) {
-        if (player_score == 5) {
-            alert("player won");
-        } else {
-            alert("computer won");
+            displayRoundResult("player");
         }
     }
 }
 
-let rock = document.querySelector(".rock");
-let paper = document.querySelector(".paper");
-let scissors = document.querySelector(".scissors");
-let round_winner = document.querySelector(".round-winner");
+function game(player_choice) {
+    playRound(player_choice)
+    if (player_score === 5 || computer_score === 5) {
+        if (player_score === 5) {
+            alert("PLAYER WINS!!!");
+            player_score = 0;
+            computer_score = 0;
+        } else {
+            alert("PLAYER LOSES!!!");
+            player_score = 0;
+            computer_score = 0;
+        }
+        round_winner.textContent = "";
+        score.textContent = "";
+    }
+}
 
-rock.addEventListener('click', () => playRound(0));
-paper.addEventListener('click', () => playRound(1));
-scissors.addEventListener('click', () => playRound(2));
+const round_winner = document.querySelector('.round-winner');
+const buttons = document.querySelectorAll('button');
+const score = document.querySelector('.score');
+
+buttons.forEach((button) => {
+   button.addEventListener('click', (e) => { game(e.target.className.split(' ')[0]) });
+});

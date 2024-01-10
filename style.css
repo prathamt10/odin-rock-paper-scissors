@@ -10,3 +10,15 @@ body {
     display: flex;
     gap: 10px;
 }
+
+button {
+    width: 7em;
+    height: 3em;
+    font-size: 18px;
+}
+
+.round-winner,
+.score {
+    margin: 1em;
+    font-size: large;
+}
